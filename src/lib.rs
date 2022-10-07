@@ -24,13 +24,18 @@ use std::time::{Duration, SystemTime};
 use crate::job::job_data::ListOfUuids;
 #[cfg(feature = "has_bytes")]
 use crate::job::job_data_prost::ListOfUuids;
-use chrono::{DateTime, Utc};
+pub use chrono::{DateTime, Utc};
 use cron::Schedule;
 #[cfg(not(feature = "has_bytes"))]
-use job::job_data::{JobAndNextTick, JobStoredData, Uuid as JobUuid};
+pub use job::job_data::{JobAndNextTick, JobStoredData, NotificationData, Uuid as JobUuid};
 #[cfg(feature = "has_bytes")]
-use job::job_data_prost::{JobAndNextTick, JobStoredData, Uuid as JobUuid};
-use uuid::Uuid;
+pub use job::job_data_prost::{
+    job_stored_data::Job as StoredJobType,
+    job_stored_data::Job::{CronJob as CronJobType, NonCronJob as NonCronJobType},
+    CronJob, JobAndNextTick, JobIdAndNotification, JobStoredData, JobType, NonCronJob,
+    NotificationData, Uuid as JobUuid,
+};
+pub use uuid::Uuid;
 
 #[cfg(feature = "nats_storage")]
 pub use crate::nats::{NatsMetadataStore, NatsNotificationStore, NatsStore, NatsStoreBuilder};
@@ -45,11 +50,13 @@ pub use job::job_data::JobState as JobNotification;
 #[cfg(feature = "has_bytes")]
 pub use job::job_data_prost::JobState as JobNotification;
 pub use job::to_code::{JobCode, NotificationCode, PinnedGetFuture, ToCode};
+pub use job::JobId;
 pub use job::JobLocked as Job;
+pub use job::NotificationId;
 pub use job::OnJobNotification;
 pub use job::{JobToRun, JobToRunAsync};
 pub use job_scheduler::JobsSchedulerLocked as JobScheduler;
-pub use store::{MetaDataStorage, NotificationStore};
+pub use store::{DataStore, InitStore, MetaDataStorage, NotificationStore};
 
 pub use simple::{
     SimpleJobCode, SimpleMetadataStore, SimpleNotificationCode, SimpleNotificationStore,
